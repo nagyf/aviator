@@ -1,5 +1,22 @@
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var webpack = require('webpack');
+
+var plugins = [
+    new HtmlWebpackPlugin({
+        template: 'index.ejs',
+        hash: true
+    })
+];
+
+if (process.env.NODE_ENV === 'prod') {
+    plugins.push(new webpack.optimize.UglifyJsPlugin({
+        compress: {
+            warnings: false,
+            drop_console: true,
+        }
+    }));
+}
 
 module.exports = {
     entry: './src/index.js',
@@ -33,10 +50,5 @@ module.exports = {
             }
         ]
     },
-    plugins: [
-        new HtmlWebpackPlugin({
-            template: 'index.ejs',
-            hash: true
-        })
-    ]
+    plugins: plugins
 };
