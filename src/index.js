@@ -55,6 +55,7 @@ class Game {
         // here we are converting the mouse position value received
         // to a normalized value varying between -1 and 1
         const tx = -1 + (event.clientX / this.width) * 2;
+        this.camera.position.z = 200 + 50 * tx;
 
         // for the vertical axis, we need to inverse the formula
         // because the 2D y-axis goes the opposite direction of the 3D y-axis
