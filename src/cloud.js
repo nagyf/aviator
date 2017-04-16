@@ -1,5 +1,5 @@
 import * as three from 'three';
-import _ from 'lodash';
+import * as _ from 'lodash';
 import colors from './colors';
 
 class Cloud {

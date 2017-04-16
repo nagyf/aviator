@@ -82,8 +82,10 @@ class Game {
         this.shadowLight.shadow.mapSize.width = 2048;
         this.shadowLight.shadow.mapSize.height = 2048;
 
+        this.ambientLight = new three.AmbientLight(0xdc8874, .4);
         this.scene.add(this.hemisphereLight);
         this.scene.add(this.shadowLight);
+        this.scene.add(this.ambientLight);
     }
 
     initObjects() {
@@ -103,25 +105,28 @@ class Game {
 
     update() {
         this.airplane.propeller.rotation.x += 0.3;
+        this.sea.moveWaves();
         this.sea.mesh.rotation.z += .005;
         this.sky.mesh.rotation.z += .01;
 
-        const targetX = this.normalize(this.mousePos.x, -1, 1, -100, 100);
-        const targetY = this.normalize(this.mousePos.y, -1, 1, 25, 175);
+        const targetX = Game.normalize(this.mousePos.x, -.75, .75, -100, 100);
+        const targetY = Game.normalize(this.mousePos.y, -.75, .75, 25, 175);
 
         // update the airplane's position
-        this.airplane.mesh.position.y = targetY;
-        this.airplane.mesh.position.x = targetX;
+        this.airplane.mesh.rotation.x = (this.airplane.mesh.position.x - targetX) * 0.0064;
+        this.airplane.mesh.position.y += (targetY - this.airplane.mesh.position.y) * 0.1;
+        this.airplane.mesh.rotation.z = (targetY - this.airplane.mesh.position.y) * 0.0128;
         this.airplane.propeller.rotation.x += 0.3;
+
+        this.airplane.pilot.updateHairs();
     }
 
-    normalize(v, vmin, vmax, tmin, tmax) {
+    static normalize(v, vmin, vmax, tmin, tmax) {
         const nv = Math.max(Math.min(v, vmax), vmin);
         const dv = vmax - vmin;
         const pc = (nv - vmin) / dv;
         const dt = tmax - tmin;
-        const tv = tmin + (pc * dt);
-        return tv;
+        return tmin + (pc * dt);
     }
 
     render() {

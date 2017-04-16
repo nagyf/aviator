@@ -1,12 +1,21 @@
 import * as three from 'three';
 import Colors from './colors';
+import Pilot from './pilot';
 
 class Airplane {
     constructor() {
         this.mesh = new three.Object3D();
 
         // Create the cabin
-        const geomCockpit = new three.BoxGeometry(60, 50, 50, 1, 1, 1);
+        const geomCockpit = new three.BoxGeometry(80, 50, 50, 1, 1, 1);
+        geomCockpit.vertices[4].y -= 10;
+        geomCockpit.vertices[4].z += 20;
+        geomCockpit.vertices[5].y -= 10;
+        geomCockpit.vertices[5].z -= 20;
+        geomCockpit.vertices[6].y += 30;
+        geomCockpit.vertices[6].z += 20;
+        geomCockpit.vertices[7].y += 30;
+        geomCockpit.vertices[7].z -= 20;
         const matCockpit = new three.MeshPhongMaterial({color: Colors.red, shading: three.FlatShading});
         const cockpit = new three.Mesh(geomCockpit, matCockpit);
         cockpit.castShadow = true;
@@ -57,6 +66,10 @@ class Airplane {
         this.propeller.add(blade);
         this.propeller.position.set(50, 0, 0);
         this.mesh.add(this.propeller);
+
+        this.pilot = new Pilot();
+        this.pilot.mesh.position.set(-10, 27, 0);
+        this.mesh.add(this.pilot.mesh);
     }
 }
 
